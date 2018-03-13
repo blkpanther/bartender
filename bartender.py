@@ -61,6 +61,12 @@ while window.update():
             hidden = False
             # Restore window; 8 = SW_SHOWNA -> Displays the window in its current size and position without activating it
             ShowWindow(FindWindow(0, window.pygame.display.get_caption()[0]), 8)
+        elif window.page == 2:
+            window.clear()
+            window.message("Page: 2")
+        elif window.page == 3:
+            window.clear()
+            window.message("Page: 3")
         # Get screen shot
         try:
             img = screen.shot()
@@ -134,8 +140,9 @@ while window.update():
             spent_resources = map(negative_sum, zip(*merged_list))
             # Clear the sublist
             saved_values[time % 60] = [(0,0,0,0)]
-            window.display_resources(gathered_resources, spent_resources, time)
-            window.display_researches(queue)
+            if window.page == 1:
+                window.display_resources(gathered_resources, spent_resources, time)
+                window.display_researches(queue)
             #print(fps)
 # End while
 print(basename(sys.argv[0])+" finished - gg")

@@ -1,7 +1,9 @@
 from cx_Freeze import setup, Executable
 import os
 #os.environ['TCL_LIBRARY'] = 'c:\\Users\\Flea\\AppData\\Local\\Programs\\Python\\Python36\\tcl\\tcl8.6'
+os.environ['TCL_LIBRARY'] = 'C:\\Program Files (x86)\\Python36-32\\tcl\\tcl8.6'
 #os.environ['TK_LIBRARY'] = 'c:\\Users\\Flea\\AppData\\Local\\Programs\\Python\\Python36\\tcl\\tk8.6'
+os.environ['TK_LIBRARY'] = 'C:\\Program Files (x86)\\Python36-32\\tcl\\tk8.6'
 
 executables = [Executable("bartender.py", base = "Win32GUI")]
 
@@ -32,7 +34,7 @@ options = {
 setup(
     name = "AoE II - Bartender",
     options = options,
-    version = "0.0",
+    version = "0.1",
     description = 'AoE II - Bartender',
     executables = executables
 )

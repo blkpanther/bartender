@@ -58,6 +58,8 @@ class PyGameWindow(object):
         self.pygame.display.set_icon(pygame.image.load("icon.png"))
         self.on_top()
         self.dataset = "Expansions"
+        self.page = 1
+        self.pages = 3
 
     def on_top(self):
         # Sets the window to be always on the top
@@ -92,6 +94,19 @@ class PyGameWindow(object):
         text = format(string)
         self.screen.blit(text, coords)
 
+    def change_page(self, direction):
+        while direction > self.pages:
+            direction = direction-self.pages
+        while direction*(-1) > self.pages:
+            direction = direction+self.pages
+        self.page = self.page+direction
+        if self.page > self.pages:
+            self.page = self.page-self.pages
+        if self.page < 0:
+            self.page = self.pages-self.page
+        if self.page == 0:
+            self.page = self.pages
+
     def quit(self):
         self.clear()
         # Print hearthfull message.
@@ -122,6 +137,11 @@ class PyGameWindow(object):
                     return False
                 if event.key == pygame.K_END:
                     self.change_dataset()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4: # Scroll mouse up
+                    self.change_page(-1)
+                if event.button == 5: # Scroll mouse down
+                    self.change_page(1)
 
         # Update the display
         self.pygame.display.flip()
@@ -175,14 +195,12 @@ class PyGameWindow(object):
         """
         PADDING = 5
         starts = self.research_starts + PADDING
-
         new_line = 24
         icon_size = 23
         horizontal_gap = 3
         vertical_gap = 1
         frame_height = 20
         frame_border = 1
-
         frame_left = PADDING + icon_size + horizontal_gap
         frame_width = self.window_size[0] - frame_left - PADDING
         bar_left = PADDING + icon_size + horizontal_gap + frame_border
@@ -223,13 +241,14 @@ class PyGameWindow(object):
             #if idx >= 10: break # BAD IDEA
 
     def error(self, string):
-        self.clear()
-        self.message(string, top=10)
-        self.message("Dataset: " + self.dataset, top=10+self.font_size+5)
-        self.message("Click on this window and ", top=10+(self.font_size+5)*2)
-        self.message(" - press [End] to change dataset", top=10+(self.font_size+5)*3)
-        self.message(" - press [Home] to show/hide the window frame", top=10+(self.font_size+5)*4 )
-        self.message(" - press [Esc] to exit", top=10+(self.font_size+5)*5)
+        if self.page == 1:
+            self.clear()
+            self.message(string, top=10)
+            self.message("Dataset: " + self.dataset, top=10+self.font_size+5)
+            self.message("Click on this window and ", top=10+(self.font_size+5)*2)
+            self.message(" - press [End] to change dataset", top=10+(self.font_size+5)*3)
+            self.message(" - press [Home] to show/hide the window frame", top=10+(self.font_size+5)*4 )
+            self.message(" - press [Esc] to exit", top=10+(self.font_size+5)*5)
 
     def show_img(self, im, rgb=False, scale=1, left=0, top=0, u_size=None, alpha=True):
         size = (len(im[1]), len(im))
